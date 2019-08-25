@@ -74,3 +74,35 @@ def f1(y_true, y_pred):
     precision = precision(y_true, y_pred)
     recall = recall(y_true, y_pred)
     return 2*((precision*recall)/(precision+recall+K.epsilon()))
+
+def signed_traj(dist, new_dist):
+	"""
+	returns pos or neg val for
+	previous trajectory
+	"""
+
+    if dist < new_dist:
+        traj = 1
+    elif dist > new_dist:
+        traj = -1
+    else:
+        traj = 0
+    return traj
+
+def previous_traj(distances):
+    """
+    Compute signed change in distance to CC for 
+    most recent journey.
+    """
+    traj = []
+    dist = distances[1:]
+    for i in range(len(dist)):
+        traj.append(-(distances[i+1] - distances[i]))
+    return traj
+
+def get_final_pos(df):
+    """
+    set '1' for final location tags.
+    """
+    final = 1 if df[:2] == '15' else 0
+    return final
